@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/EnriquePH/FARS.svg?branch=master)](https://travis-ci.org/EnriquePH/FARS)
+
 # Create Package in R Example
 
 ## Data Source:
