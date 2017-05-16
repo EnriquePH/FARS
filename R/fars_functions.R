@@ -8,10 +8,6 @@
 #  Start: 08/May/2017
 #  End:   15/May/2017
 #  ---------------------------------------------------------------------------
-# DESCRIPTION:
-# Document R functions using roxygen2 format. Documentation has been tested
-# in a package and code is free of errors, warnings and notes.
-#  ---------------------------------------------------------------------------
 
 #' Read file with FARS data
 #'
