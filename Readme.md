@@ -1,13 +1,10 @@
-[![Build Status](https://travis-ci.org/EnriquePH/FARS.svg?branch=master)](https://travis-ci.org/EnriquePH/FARS)
-
-[![AppVeyor Build Status](https://ci.appveyor.com/api/projects/status/github/EnriquePH/FARS?branch=master&svg=true)](https://ci.appveyor.com/project/EnriquePH/FARS)
-
-
 # COURSERA: BUILDING R PACKAGES
 Peer-graded Assignment   
 Enrique Pérez Herrero   
 email: eph.project1500@gmail.com   
 GNU GENERAL PUBLIC LICENSE Version 3, 29 June 2007   
+
+[![Build Status](https://travis-ci.org/EnriquePH/FARS.svg?branch=master)](https://travis-ci.org/EnriquePH/FARS) [![AppVeyor Build Status](https://ci.appveyor.com/api/projects/status/github/EnriquePH/FARS?branch=master&svg=true)](https://ci.appveyor.com/project/EnriquePH/FARS)
 
 ## Create an Example Package in R 
 
@@ -47,3 +44,4 @@ notes?
 * [Text formatting reference sheet](https://cran.r-project.org/web/packages/roxygen2/vignettes/formatting.html)
 * [Writing R Extensions](https://cran.r-project.org/doc/manuals/R-exts.html#Creating-R-packages)
 * [Travis: Building R packages](https://docs.travis-ci.com/user/languages/r/)
+* [Vignettes: long-form documentation](http://r-pkgs.had.co.nz/vignettes.html)
