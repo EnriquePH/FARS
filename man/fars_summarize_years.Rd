@@ -16,10 +16,8 @@ A data.frame with number of accidents by years summarized by month
 This function summarizes yearly accidents data by month
 }
 \examples{
-\dontrun{
 plot(fars_summarize_years(2015))
 fars_summarize_years(c(2015, 2014))
-}
 }
 \seealso{
 \link{fars_read_years}
