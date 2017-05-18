@@ -32,16 +32,17 @@ corresponding documentation files?
 [vignette](https://github.com/EnriquePH/FARS/blob/master/vignettes/fars.Rmd) 
 which provides a meaningful description of the package and how it should be 
 used?
-* Does this package have at least one test included in the tests/ directory?
+* Does this package have at least one test included in the [tests/](https://github.com/EnriquePH/FARS/tree/master/tests/testthat) directory?
 * Does this package have a [NAMESPACE](https://github.com/EnriquePH/FARS/blob/master/NAMESPACE) file?
 * Does the README.md file for this directory have a [Travis badge](https://travis-ci.org/EnriquePH/FARS)?
 * Is the build of this package passing on [Travis badge](https://travis-ci.org/EnriquePH/FARS)?
 * Are the build logs for this package on [Travis badge](https://travis-ci.org/EnriquePH/FARS) free of any errors, warnings, or notes?
 
-## Note:
+## Notes:
 
-Package has passed also
-[AppVeyor](https://ci.appveyor.com/project/EnriquePH/FARS) tests
+* Package has passed also
+[AppVeyor](https://ci.appveyor.com/project/EnriquePH/FARS) tests   
+* Please, follow the links on Review Criteria.
 
 ## Links:
 * [Writing an R package from scratch](https://hilaryparker.com/2014/04/29/writing-an-r-package-from-scratch/)    
