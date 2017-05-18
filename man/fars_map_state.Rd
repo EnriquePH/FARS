@@ -71,7 +71,7 @@ fars_map_state(state.num, year)
 None
 }
 \description{
-Creates a plot with a state map including the accidents location by year
+Displays a plot with a state map including the accidents location by year
 If the \code{state.num} is invalid the function shows an error
 }
 \examples{

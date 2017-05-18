@@ -14,7 +14,7 @@ A data.frame including entries in data by month, or NULL if the
  \code{year} is not valid
 }
 \description{
-Ancillary function for \code{fars_summarize_years}
+Ancillary function used by \code{fars_summarize_years}
 }
 \examples{
 fars_read_years(2013)

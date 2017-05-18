@@ -13,7 +13,7 @@ fars_summarize_years(years)
 A data.frame with number of accidents by years summarized by month
 }
 \description{
-This function summarizes yearly accidents data by month
+This function summarizes yearly accidents data, by month
 }
 \examples{
 plot(fars_summarize_years(2015))

@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+
+<meta charset="utf-8" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="pandoc" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<meta name="author" content="Enrique Pérez Herrero" />
+
+<meta name="date" content="2017-05-18" />
+
+<title>Fatality Analysis Reporting System (FARS)</title>
+
+
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+div.sourceCode { overflow-x: auto; }
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; line-height: 100%; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
+td.sourceCode { padding-left: 5px; }
+code > span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code > span.dt { color: #902000; } /* DataType */
+code > span.dv { color: #40a070; } /* DecVal */
+code > span.bn { color: #40a070; } /* BaseN */
+code > span.fl { color: #40a070; } /* Float */
+code > span.ch { color: #4070a0; } /* Char */
+code > span.st { color: #4070a0; } /* String */
+code > span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code > span.ot { color: #007020; } /* Other */
+code > span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code > span.fu { color: #06287e; } /* Function */
+code > span.er { color: #ff0000; font-weight: bold; } /* Error */
+code > span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+code > span.cn { color: #880000; } /* Constant */
+code > span.sc { color: #4070a0; } /* SpecialChar */
+code > span.vs { color: #4070a0; } /* VerbatimString */
+code > span.ss { color: #bb6688; } /* SpecialString */
+code > span.im { } /* Import */
+code > span.va { color: #19177c; } /* Variable */
+code > span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code > span.op { color: #666666; } /* Operator */
+code > span.bu { } /* BuiltIn */
+code > span.ex { } /* Extension */
+code > span.pp { color: #bc7a00; } /* Preprocessor */
+code > span.at { color: #7d9029; } /* Attribute */
+code > span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code > span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code > span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+</style>
+
+
+
+<link href="data:text/css;charset=utf-8,body%20%7B%0Abackground%2Dcolor%3A%20%23fff%3B%0Amargin%3A%201em%20auto%3B%0Amax%2Dwidth%3A%20700px%3B%0Aoverflow%3A%20visible%3B%0Apadding%2Dleft%3A%202em%3B%0Apadding%2Dright%3A%202em%3B%0Afont%2Dfamily%3A%20%22Open%20Sans%22%2C%20%22Helvetica%20Neue%22%2C%20Helvetica%2C%20Arial%2C%20sans%2Dserif%3B%0Afont%2Dsize%3A%2014px%3B%0Aline%2Dheight%3A%201%2E35%3B%0A%7D%0A%23header%20%7B%0Atext%2Dalign%3A%20center%3B%0A%7D%0A%23TOC%20%7B%0Aclear%3A%20both%3B%0Amargin%3A%200%200%2010px%2010px%3B%0Apadding%3A%204px%3B%0Awidth%3A%20400px%3B%0Aborder%3A%201px%20solid%20%23CCCCCC%3B%0Aborder%2Dradius%3A%205px%3B%0Abackground%2Dcolor%3A%20%23f6f6f6%3B%0Afont%2Dsize%3A%2013px%3B%0Aline%2Dheight%3A%201%2E3%3B%0A%7D%0A%23TOC%20%2Etoctitle%20%7B%0Afont%2Dweight%3A%20bold%3B%0Afont%2Dsize%3A%2015px%3B%0Amargin%2Dleft%3A%205px%3B%0A%7D%0A%23TOC%20ul%20%7B%0Apadding%2Dleft%3A%2040px%3B%0Amargin%2Dleft%3A%20%2D1%2E5em%3B%0Amargin%2Dtop%3A%205px%3B%0Amargin%2Dbottom%3A%205px%3B%0A%7D%0A%23TOC%20ul%20ul%20%7B%0Amargin%2Dleft%3A%20%2D2em%3B%0A%7D%0A%23TOC%20li%20%7B%0Aline%2Dheight%3A%2016px%3B%0A%7D%0Atable%20%7B%0Amargin%3A%201em%20auto%3B%0Aborder%2Dwidth%3A%201px%3B%0Aborder%2Dcolor%3A%20%23DDDDDD%3B%0Aborder%2Dstyle%3A%20outset%3B%0Aborder%2Dcollapse%3A%20collapse%3B%0A%7D%0Atable%20th%20%7B%0Aborder%2Dwidth%3A%202px%3B%0Apadding%3A%205px%3B%0Aborder%2Dstyle%3A%20inset%3B%0A%7D%0Atable%20td%20%7B%0Aborder%2Dwidth%3A%201px%3B%0Aborder%2Dstyle%3A%20inset%3B%0Aline%2Dheight%3A%2018px%3B%0Apadding%3A%205px%205px%3B%0A%7D%0Atable%2C%20table%20th%2C%20table%20td%20%7B%0Aborder%2Dleft%2Dstyle%3A%20none%3B%0Aborder%2Dright%2Dstyle%3A%20none%3B%0A%7D%0Atable%20thead%2C%20table%20tr%2Eeven%20%7B%0Abackground%2Dcolor%3A%20%23f7f7f7%3B%0A%7D%0Ap%20%7B%0Amargin%3A%200%2E5em%200%3B%0A%7D%0Ablockquote%20%7B%0Abackground%2Dcolor%3A%20%23f6f6f6%3B%0Apadding%3A%200%2E25em%200%2E75em%3B%0A%7D%0Ahr%20%7B%0Aborder%2Dstyle%3A%20solid%3B%0Aborder%3A%20none%3B%0Aborder%2Dtop%3A%201px%20solid%20%23777%3B%0Amargin%3A%2028px%200%3B%0A%7D%0Adl%20%7B%0Amargin%2Dleft%3A%200%3B%0A%7D%0Adl%20dd%20%7B%0Amargin%2Dbottom%3A%2013px%3B%0Amargin%2Dleft%3A%2013px%3B%0A%7D%0Adl%20dt%20%7B%0Afont%2Dweight%3A%20bold%3B%0A%7D%0Aul%20%7B%0Amargin%2Dtop%3A%200%3B%0A%7D%0Aul%20li%20%7B%0Alist%2Dstyle%3A%20circle%20outside%3B%0A%7D%0Aul%20ul%20%7B%0Amargin%2Dbottom%3A%200%3B%0A%7D%0Apre%2C%20code%20%7B%0Abackground%2Dcolor%3A%20%23f7f7f7%3B%0Aborder%2Dradius%3A%203px%3B%0Acolor%3A%20%23333%3B%0Awhite%2Dspace%3A%20pre%2Dwrap%3B%20%0A%7D%0Apre%20%7B%0Aborder%2Dradius%3A%203px%3B%0Amargin%3A%205px%200px%2010px%200px%3B%0Apadding%3A%2010px%3B%0A%7D%0Apre%3Anot%28%5Bclass%5D%29%20%7B%0Abackground%2Dcolor%3A%20%23f7f7f7%3B%0A%7D%0Acode%20%7B%0Afont%2Dfamily%3A%20Consolas%2C%20Monaco%2C%20%27Courier%20New%27%2C%20monospace%3B%0Afont%2Dsize%3A%2085%25%3B%0A%7D%0Ap%20%3E%20code%2C%20li%20%3E%20code%20%7B%0Apadding%3A%202px%200px%3B%0A%7D%0Adiv%2Efigure%20%7B%0Atext%2Dalign%3A%20center%3B%0A%7D%0Aimg%20%7B%0Abackground%2Dcolor%3A%20%23FFFFFF%3B%0Apadding%3A%202px%3B%0Aborder%3A%201px%20solid%20%23DDDDDD%3B%0Aborder%2Dradius%3A%203px%3B%0Aborder%3A%201px%20solid%20%23CCCCCC%3B%0Amargin%3A%200%205px%3B%0A%7D%0Ah1%20%7B%0Amargin%2Dtop%3A%200%3B%0Afont%2Dsize%3A%2035px%3B%0Aline%2Dheight%3A%2040px%3B%0A%7D%0Ah2%20%7B%0Aborder%2Dbottom%3A%204px%20solid%20%23f7f7f7%3B%0Apadding%2Dtop%3A%2010px%3B%0Apadding%2Dbottom%3A%202px%3B%0Afont%2Dsize%3A%20145%25%3B%0A%7D%0Ah3%20%7B%0Aborder%2Dbottom%3A%202px%20solid%20%23f7f7f7%3B%0Apadding%2Dtop%3A%2010px%3B%0Afont%2Dsize%3A%20120%25%3B%0A%7D%0Ah4%20%7B%0Aborder%2Dbottom%3A%201px%20solid%20%23f7f7f7%3B%0Amargin%2Dleft%3A%208px%3B%0Afont%2Dsize%3A%20105%25%3B%0A%7D%0Ah5%2C%20h6%20%7B%0Aborder%2Dbottom%3A%201px%20solid%20%23ccc%3B%0Afont%2Dsize%3A%20105%25%3B%0A%7D%0Aa%20%7B%0Acolor%3A%20%230033dd%3B%0Atext%2Ddecoration%3A%20none%3B%0A%7D%0Aa%3Ahover%20%7B%0Acolor%3A%20%236666ff%3B%20%7D%0Aa%3Avisited%20%7B%0Acolor%3A%20%23800080%3B%20%7D%0Aa%3Avisited%3Ahover%20%7B%0Acolor%3A%20%23BB00BB%3B%20%7D%0Aa%5Bhref%5E%3D%22http%3A%22%5D%20%7B%0Atext%2Ddecoration%3A%20underline%3B%20%7D%0Aa%5Bhref%5E%3D%22https%3A%22%5D%20%7B%0Atext%2Ddecoration%3A%20underline%3B%20%7D%0A%0Acode%20%3E%20span%2Ekw%20%7B%20color%3A%20%23555%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%0Acode%20%3E%20span%2Edt%20%7B%20color%3A%20%23902000%3B%20%7D%20%0Acode%20%3E%20span%2Edv%20%7B%20color%3A%20%2340a070%3B%20%7D%20%0Acode%20%3E%20span%2Ebn%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Efl%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Ech%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Est%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Eco%20%7B%20color%3A%20%23888888%3B%20font%2Dstyle%3A%20italic%3B%20%7D%20%0Acode%20%3E%20span%2Eot%20%7B%20color%3A%20%23007020%3B%20%7D%20%0Acode%20%3E%20span%2Eal%20%7B%20color%3A%20%23ff0000%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%0Acode%20%3E%20span%2Efu%20%7B%20color%3A%20%23900%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%20code%20%3E%20span%2Eer%20%7B%20color%3A%20%23a61717%3B%20background%2Dcolor%3A%20%23e3d2d2%3B%20%7D%20%0A" rel="stylesheet" type="text/css" />
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">Fatality Analysis Reporting System (FARS)</h1>
+<h4 class="author"><em>Enrique Pérez Herrero</em></h4>
+<h4 class="date"><em>2017-05-18</em></h4>
+
+
+
+<div id="package-description" class="section level1">
+<h1>Package Description</h1>
+<p><code>fars</code> package reads and plots Fatality Analysis Reporting System (FARS) data from the <a href="https://www.nhtsa.gov/research-data/fatality-analysis-reporting-system-fars">National Highway Traffic Safety Administration</a>.</p>
+<p><a href="https://en.wikipedia.org/wiki/Fatality_Analysis_Reporting_System">FARS</a> is a nationwide census, providing the American public yearly data, regarding fatal injuries suffered in motor vehicle traffic crashes.</p>
+<div id="load-packages" class="section level2">
+<h2>Load Packages</h2>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(fars)
+<span class="kw">library</span>(maps)</code></pre></div>
+</div>
+<div id="included-data" class="section level2">
+<h2>Included data</h2>
+<p>Data files included within the package are:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">list.files</span>(<span class="kw">system.file</span>(<span class="st">&quot;extdata&quot;</span>, <span class="dt">package =</span> <span class="st">&quot;fars&quot;</span>))</code></pre></div>
+<pre><code>## [1] &quot;accident_2013.csv.bz2&quot; &quot;accident_2014.csv.bz2&quot; &quot;accident_2015.csv.bz2&quot;</code></pre>
+</div>
+<div id="package-functions" class="section level2">
+<h2>Package Functions</h2>
+<div id="function-make_filename" class="section level3">
+<h3>Function <code>make_filename</code></h3>
+<p>This function returns file name and path to the data files:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">yr &lt;-<span class="st"> </span><span class="dv">2015</span>
+<span class="kw">make_filename</span>(yr)</code></pre></div>
+<pre><code>## [1] &quot;/home/eph/Desktop/CODE-MESOTEVS/02-PROJECT1500/01-Coursera/06-Mastering Software Development in R Specialization/03-Building R Packages/Peer-graded Assignment/fars/inst/extdata/accident_2015.csv.bz2&quot;</code></pre>
+</div>
+<div id="function-fars_read_years" class="section level3">
+<h3>Function <code>fars_read_years</code></h3>
+<p>Ancillary function used by <code>fars_summarize_years</code></p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">fars_read_years</span>(<span class="dv">2013</span>)</code></pre></div>
+<pre><code>## [[1]]
+## # A tibble: 30,202 x 2
+##    MONTH  year
+##    &lt;int&gt; &lt;int&gt;
+##  1     1  2013
+##  2     1  2013
+##  3     1  2013
+##  4     1  2013
+##  5     1  2013
+##  6     1  2013
+##  7     1  2013
+##  8     1  2013
+##  9     1  2013
+## 10     1  2013
+## # ... with 30,192 more rows</code></pre>
+</div>
+<div id="function-fars_summarize_years" class="section level3">
+<h3>Function <code>fars_summarize_years</code></h3>
+<p>This function summarizes yearly accidents data, by month.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plot</span>(<span class="kw">fars_summarize_years</span>(<span class="dv">2015</span>))</code></pre></div>
+<p><img src="data:image/png;base64,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" /><!-- --></p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">fars_summarize_years</span>(<span class="kw">c</span>(<span class="dv">2015</span>, <span class="dv">2014</span>))</code></pre></div>
+<pre><code>## # A tibble: 12 x 3
+##    MONTH `2014` `2015`
+##  * &lt;int&gt;  &lt;int&gt;  &lt;int&gt;
+##  1     1   2168   2368
+##  2     2   1893   1968
+##  3     3   2245   2385
+##  4     4   2308   2430
+##  5     5   2596   2847
+##  6     6   2583   2765
+##  7     7   2696   2998
+##  8     8   2800   3016
+##  9     9   2618   2865
+## 10    10   2831   3019
+## 11    11   2714   2724
+## 12    12   2604   2781</code></pre>
+</div>
+<div id="function-fars_map_state" class="section level3">
+<h3>Function <code>fars_map_state</code></h3>
+<p>The function displays a state map plot including accidents location by year</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">state_num &lt;-<span class="st"> </span><span class="dv">49</span> <span class="co"># Utah</span>
+yr &lt;-<span class="st"> </span><span class="dv">2014</span>
+<span class="kw">fars_map_state</span>(state_num, yr)</code></pre></div>
+<p><img src="data:image/png;base64,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" /><!-- --></p>
+</div>
+</div>
+</div>
+<div id="links" class="section level1">
+<h1>Links:</h1>
+<ul>
+<li><a href="https://github.com/EnriquePH/FARS">Package fars GitHub</a></li>
+<li><a href="https://travis-ci.org/EnriquePH/FARS">Package fars Travis CI</a></li>
+<li><a href="https://ci.appveyor.com/project/EnriquePH/FARS">Package Appveyor</a></li>
+</ul>
+</div>
+
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

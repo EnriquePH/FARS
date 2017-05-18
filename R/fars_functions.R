@@ -6,7 +6,7 @@
 #  email: eph.project1500@gmail.com
 #  GNU GENERAL PUBLIC LICENSE Version 3, 29 June 2007
 #  Start: 08/May/2017
-#  End:   15/May/2017
+#  End:   18/May/2017
 #  ---------------------------------------------------------------------------
 
 #' Read file with FARS data
@@ -76,7 +76,7 @@ make_filename <- function(year) {
 
 #' Read FARS years
 #'
-#' Ancillary function for \code{fars_summarize_years}
+#' Ancillary function used by \code{fars_summarize_years}
 #' @param years A vector with a list of years
 #'
 #' @importFrom dplyr mutate_
@@ -108,7 +108,7 @@ fars_read_years <- function(years) {
 
 #' Summarize FARS data by years
 #'
-#' This function summarizes yearly accidents data by month
+#' This function summarizes yearly accidents data, by month
 #' @param years A vector with a list of years to summarize by.
 #'
 #' @return A data.frame with number of accidents by years summarized by month
@@ -132,7 +132,7 @@ fars_summarize_years <- function(years) {
 
 #' Display accidents map by state and year
 #'
-#' Creates a plot with a state map including the accidents location by year
+#' Displays a plot with a state map including the accidents location by year
 #' If the \code{state.num} is invalid the function shows an error
 #' @param state.num An Integer with the State Code
 #' \tabular{cc}{
