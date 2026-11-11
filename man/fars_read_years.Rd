@@ -2,27 +2,24 @@
 % Please edit documentation in R/fars_functions.R
 \name{fars_read_years}
 \alias{fars_read_years}
-\title{Read FARS years}
+\title{Read the month of every accident of some years}
 \usage{
 fars_read_years(years)
 }
 \arguments{
-\item{years}{A vector with a list of years}
+\item{years}{Vector of years.}
 }
 \value{
-A data.frame including entries in data by month, or NULL if the
- \code{year} is not valid
+A list with one element per year: a tibble with the columns \code{MONTH}
+and \code{year}, or \code{NULL} (with a warning) when there is no data for that
+year.
 }
 \description{
-Ancillary function used by \code{fars_summarize_years}
+Helper of \code{\link[=fars_summarize_years]{fars_summarize_years()}}.
 }
 \examples{
-fars_read_years(2013)
+str(fars_read_years(2013))
 }
 \seealso{
-\link{fars_read}
-
-\link{make_filename}
-
-\link{fars_summarize_years}
+\code{\link[=fars_read]{fars_read()}}, \code{\link[=make_filename]{make_filename()}}, \code{\link[=fars_summarize_years]{fars_summarize_years()}}
 }

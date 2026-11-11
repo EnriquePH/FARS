@@ -1,5 +1,8 @@
 ^.*\.Rproj$
 ^\.Rproj\.user$
-^Readme\.md$
-^\.travis\.yml$
-^appveyor\.yml$
+^\.github$
+^\.lintr$
+^README\.md$
+^NEWS\.md$
+^doc$
+^Meta$

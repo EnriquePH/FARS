@@ -2,23 +2,24 @@
 % Please edit documentation in R/fars_functions.R
 \name{fars_summarize_years}
 \alias{fars_summarize_years}
-\title{Summarize FARS data by years}
+\title{Number of accidents by month and year}
 \usage{
 fars_summarize_years(years)
 }
 \arguments{
-\item{years}{A vector with a list of years to summarize by.}
+\item{years}{Vector of years.}
 }
 \value{
-A data.frame with number of accidents by years summarized by month
+A tibble with one row per month (\code{MONTH}) and one column per year
+with the number of accidents. Years without data are left out, with a
+warning.
 }
 \description{
-This function summarizes yearly accidents data, by month
+Number of accidents by month and year
 }
 \examples{
-plot(fars_summarize_years(2015))
-fars_summarize_years(c(2015, 2014))
+fars_summarize_years(c(2014, 2015))
 }
 \seealso{
-\link{fars_read_years}
+\code{\link[=fars_read_years]{fars_read_years()}}
 }

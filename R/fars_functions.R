@@ -1,140 +1,110 @@
 #  ----------------------------------------------------------------------------
-#  COURSERA: BUILDING R PACKAGES
-#  Peer-graded Assignment
+#  fars: read, summarise and map FARS data
 #  File: fars_functions.R
-#  (c) 2017 - Enrique Pérez Herrero
-#  email: eph.project1500@gmail.com
+#  (c) 2017-2026 Enrique Pérez Herrero
 #  GNU GENERAL PUBLIC LICENSE Version 3, 29 June 2007
-#  Start: 08/May/2017
-#  End:   18/May/2017
-#  ---------------------------------------------------------------------------
+#  First written for the Coursera "Building R Packages" peer-graded assignment
+#  (May 2017); updated in 2026 for current dplyr and tidyr.
+#  ----------------------------------------------------------------------------
 
-#' Read file with FARS data
+#' Read a file of FARS data
 #'
-#' This function reads data from .csv file, stored on disk, from the \strong{US
-#' National Highway Traffic Safety Administration's} \emph{Fatality Analysis
-#' Reporting System} (FARS), which is a nationwide census, providing the
-#' American public yearly data, regarding fatal injuries suffered in motor
-#' vehicle traffic crashes.
+#' Reads a CSV file (it can be compressed, e.g. `.csv.bz2`) from the
+#' **US National Highway Traffic Safety Administration's** *Fatality Analysis
+#' Reporting System* (FARS), a nationwide census with yearly data about the
+#' fatal injuries suffered in motor vehicle traffic crashes.
 #'
 #' @details For more information, see:
-#' \itemize{
-#'   \item{\url{https://www.nhtsa.gov/research-data/fatality-analysis-reporting-system-fars}}
-#'   \item{\url{https://en.wikipedia.org/wiki/Fatality_Analysis_Reporting_System}}
-#' }
-#' @importFrom readr read_csv
-#' @importFrom dplyr tbl_df
+#' * <https://www.nhtsa.gov/research-data/fatality-analysis-reporting-system-fars>
+#' * <https://en.wikipedia.org/wiki/Fatality_Analysis_Reporting_System>
 #'
-#' @param filename A character string with the name of the file to read, see
-#'   notes.
+#' @param filename Path of the file to read. [make_filename()] gives the path
+#'   of the files shipped with the package.
 #'
-#' @return A data frame with data readed from the csv file, or an error if the
-#'   file does not exists.
-#'
+#' @return A tibble with one row per accident.
+#' @seealso [make_filename()]
 #' @examples
-#' library(dplyr)
-#' library(readr)
-#' yr <- 2015
-#' data <- yr %>%
-#'   make_filename %>%
-#'   fars_read
-#' head(data)
-#' @note To generate file name use: \code{\link{make_filename}}
-#' @seealso \link{make_filename}
+#' accidents <- fars_read(make_filename(2015))
+#' dim(accidents)
 #' @export
 fars_read <- function(filename) {
-        if(!file.exists(filename))
-                stop("file '", filename, "' does not exist")
-        data <- suppressMessages({
-                readr::read_csv(filename, progress = FALSE)
-        })
-        dplyr::tbl_df(data)
+  if (!file.exists(filename)) {
+    stop("file '", filename, "' does not exist", call. = FALSE)
+  }
+  tibble::as_tibble(utils::read.csv(filename, stringsAsFactors = FALSE))
 }
 
-
-#' Make data file name
+#' Path of the FARS data file of a year
 #'
-#' Make .csv data file name related to the given \code{year}
-#' The function does not check if the file is available.
+#' The package ships the accident files of 2013, 2014 and 2015.
 #'
-#' @param year A string or an integer with the input \code{year}
+#' @param year Year, as a number or a string.
 #'
-#' @return This function returns a string with the data file name for a given
-#'   year, and the file path within the package.
-#'
+#' @return The path of `accident_<year>.csv.bz2` inside the package; an error
+#'   if there is no file for that year.
+#' @seealso [fars_read()]
 #' @examples
 #' make_filename(2013)
-#' @seealso \link{fars_read}
 #' @export
 make_filename <- function(year) {
-        year <- as.integer(year)
-        system.file("extdata",
-                    sprintf("accident_%d.csv.bz2", year),
-                    package = "fars",
-                    mustWork = TRUE)
+  year <- as.integer(year)
+  system.file("extdata", sprintf("accident_%d.csv.bz2", year),
+              package = "fars", mustWork = TRUE)
 }
 
-#' Read FARS years
+#' Read the month of every accident of some years
 #'
-#' Ancillary function used by \code{fars_summarize_years}
-#' @param years A vector with a list of years
+#' Helper of [fars_summarize_years()].
 #'
-#' @importFrom dplyr mutate_
-#' @importFrom dplyr select_
-#' @importFrom magrittr "%>%"
-#
-#' @return A data.frame including entries in data by month, or NULL if the
-#'  \code{year} is not valid
+#' @param years Vector of years.
 #'
-#' @seealso \link{fars_read}
-#' @seealso \link{make_filename}
-#' @seealso \link{fars_summarize_years}
+#' @return A list with one element per year: a tibble with the columns `MONTH`
+#'   and `year`, or `NULL` (with a warning) when there is no data for that
+#'   year.
+#' @seealso [fars_read()], [make_filename()], [fars_summarize_years()]
 #' @examples
-#' fars_read_years(2013)
+#' str(fars_read_years(2013))
 #' @export
 fars_read_years <- function(years) {
-        lapply(years, function(year) {
-          file <- make_filename(year)
-                tryCatch({
-                        dat <- fars_read(file)
-                        dplyr::mutate_(dat,  year = "YEAR") %>%
-                          dplyr::select_("MONTH", "year")
-                }, error = function(e) {
-                        warning("invalid year: ", year)
-                        return(NULL)
-                })
-        })
+  lapply(years, function(year) {
+    tryCatch({
+      dat <- fars_read(make_filename(year))
+      dat |>
+        dplyr::mutate(year = .data$YEAR) |>
+        dplyr::select("MONTH", "year")
+    }, error = function(e) {
+      warning("invalid year: ", year, call. = FALSE)
+      NULL
+    })
+  })
 }
 
-#' Summarize FARS data by years
+#' Number of accidents by month and year
 #'
-#' This function summarizes yearly accidents data, by month
-#' @param years A vector with a list of years to summarize by.
+#' @param years Vector of years.
 #'
-#' @return A data.frame with number of accidents by years summarized by month
-#' @importFrom dplyr bind_rows
-#' @importFrom dplyr group_by_
-#' @importFrom dplyr summarize_
-#' @importFrom tidyr spread_
-#' @importFrom magrittr "%>%"
-#' @seealso \link{fars_read_years}
+#' @return A tibble with one row per month (`MONTH`) and one column per year
+#'   with the number of accidents. Years without data are left out, with a
+#'   warning.
+#' @seealso [fars_read_years()]
 #' @examples
-#' plot(fars_summarize_years(2015))
-#' fars_summarize_years(c(2015, 2014))
+#' fars_summarize_years(c(2014, 2015))
 #' @export
 fars_summarize_years <- function(years) {
-  dat_list <- fars_read_years(years)
-  dplyr::bind_rows(dat_list) %>%
-    dplyr::group_by_("year", "MONTH") %>%
-    dplyr::summarize_(n = "n()") %>%
-    tidyr::spread_("year", "n")
+  fars_read_years(years) |>
+    dplyr::bind_rows() |>
+    dplyr::count(.data$year, .data$MONTH) |>
+    tidyr::pivot_wider(names_from = "year", values_from = "n")
 }
 
-#' Display accidents map by state and year
+#' Map the accidents of a state in a year
 #'
-#' Displays a plot with a state map including the accidents location by year
-#' If the \code{state.num} is invalid the function shows an error
-#' @param state.num An Integer with the State Code
+#' Draws the map of the state and a point for every accident of that year.
+#' Locations coded as unknown (longitude above 900, latitude above 90) are
+#' left out.
+#'
+#' @param state.num State code (number), from 1 (Alabama) to 56 (Wyoming); the
+#'   codes follow the FARS coding manual:
 #' \tabular{cc}{
 #'   \strong{State Code} \tab \strong{State Name}    \cr
 #'   01 \tab  Alabama              \cr
@@ -191,37 +161,30 @@ fars_summarize_years <- function(years) {
 #'   55 \tab  Wisconsin            \cr
 #'   56 \tab  Wyoming
 #' }
-#' @param year A string, or an integer, with the input \code{year}
+#' @param year Year, as a number or a string.
 #'
-#' @importFrom maps map
-#' @importFrom dplyr filter_
-#' @importFrom graphics points
-#' @return None
-#' @seealso \link{fars_read}
-#' @seealso \link{make_filename}
-#' @references 2014 FARS/NASS GES Coding and Validation Manual
+#' @return `NULL`, invisibly; called for the plot. An error if the state code
+#'   is not in the data of that year.
+#' @references 2014 FARS/NASS GES Coding and Validation Manual.
+#' @seealso [fars_read()], [make_filename()]
 #' @examples
-#' \dontrun{
 #' fars_map_state(49, 2015)
-#' }
 #' @export
 fars_map_state <- function(state.num, year) {
-  filename <- make_filename(year)
-  data <- fars_read(filename)
+  data <- fars_read(make_filename(year))
   state.num <- as.integer(state.num)
-  if(!(state.num %in% unique(data$STATE))) {
-    stop("invalid STATE number: ", state.num)
+  if (!(state.num %in% unique(data$STATE))) {
+    stop("invalid STATE number: ", state.num, call. = FALSE)
   }
-  data.sub <- dplyr::filter_(data, .dots = paste0("STATE==", state.num))
-  if(nrow(data.sub) == 0L) {
+  data.sub <- dplyr::filter(data, .data$STATE == state.num)
+  if (nrow(data.sub) == 0L) {
     message("no accidents to plot")
     return(invisible(NULL))
   }
   is.na(data.sub$LONGITUD) <- data.sub$LONGITUD > 900
   is.na(data.sub$LATITUDE) <- data.sub$LATITUDE > 90
-  with(data.sub, {
-    maps::map("state", ylim = range(LATITUDE, na.rm = TRUE),
-              xlim = range(LONGITUD, na.rm = TRUE))
-    graphics::points(LONGITUD, LATITUDE, pch = 46)
-  })
+  maps::map("state", ylim = range(data.sub$LATITUDE, na.rm = TRUE),
+            xlim = range(data.sub$LONGITUD, na.rm = TRUE))
+  graphics::points(data.sub$LONGITUD, data.sub$LATITUDE, pch = 46)
+  invisible(NULL)
 }

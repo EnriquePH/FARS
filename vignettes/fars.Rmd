@@ -1,10 +1,9 @@
 ---
 title: "Fatality Analysis Reporting System (FARS)"
 author: "Enrique Pérez Herrero"
-date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Vignette Title}
+  %\VignetteIndexEntry{Reading, summarising and mapping FARS data}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -24,7 +23,6 @@ injuries suffered in motor vehicle traffic crashes.
 
 ```{r}
 library(fars)
-library(maps)
 ```
 
 
@@ -50,10 +48,10 @@ make_filename(yr)
 
 ### Function `fars_read_years`
 
-Ancillary function used by `fars_summarize_years`
+Helper of `fars_summarize_years`: the month and year of every accident.
 
 ```{r}
-fars_read_years(2013)
+str(fars_read_years(2013))
 ```
 
 
@@ -62,16 +60,15 @@ fars_read_years(2013)
 This function summarizes yearly accidents data, by month.
 
 ```{r}
-plot(fars_summarize_years(2015))
-fars_summarize_years(c(2015, 2014))
+fars_summarize_years(c(2014, 2015))
 ```
 
 ### Function `fars_map_state`
 
-The function displays a state map plot including accidents location
-by year
+The function draws the map of a state with a point for every accident of
+a year.
 
-```{r}
+```{r, fig.width = 6, fig.height = 5}
 state_num <- 49 # Utah
 yr <- 2014
 fars_map_state(state_num, yr)

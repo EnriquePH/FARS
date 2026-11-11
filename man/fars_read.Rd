@@ -2,44 +2,34 @@
 % Please edit documentation in R/fars_functions.R
 \name{fars_read}
 \alias{fars_read}
-\title{Read file with FARS data}
+\title{Read a file of FARS data}
 \usage{
 fars_read(filename)
 }
 \arguments{
-\item{filename}{A character string with the name of the file to read, see
-notes.}
+\item{filename}{Path of the file to read. \code{\link[=make_filename]{make_filename()}} gives the path
+of the files shipped with the package.}
 }
 \value{
-A data frame with data readed from the csv file, or an error if the
-  file does not exists.
+A tibble with one row per accident.
 }
 \description{
-This function reads data from .csv file, stored on disk, from the \strong{US
-National Highway Traffic Safety Administration's} \emph{Fatality Analysis
-Reporting System} (FARS), which is a nationwide census, providing the
-American public yearly data, regarding fatal injuries suffered in motor
-vehicle traffic crashes.
+Reads a CSV file (it can be compressed, e.g. \code{.csv.bz2}) from the
+\strong{US National Highway Traffic Safety Administration's} \emph{Fatality Analysis
+Reporting System} (FARS), a nationwide census with yearly data about the
+fatal injuries suffered in motor vehicle traffic crashes.
 }
 \details{
 For more information, see:
 \itemize{
-  \item{\url{https://www.nhtsa.gov/research-data/fatality-analysis-reporting-system-fars}}
-  \item{\url{https://en.wikipedia.org/wiki/Fatality_Analysis_Reporting_System}}
+\item \url{https://www.nhtsa.gov/research-data/fatality-analysis-reporting-system-fars}
+\item \url{https://en.wikipedia.org/wiki/Fatality_Analysis_Reporting_System}
 }
-}
-\note{
-To generate file name use: \code{\link{make_filename}}
 }
 \examples{
-library(dplyr)
-library(readr)
-yr <- 2015
-data <- yr \%>\%
-  make_filename \%>\%
-  fars_read
-head(data)
+accidents <- fars_read(make_filename(2015))
+dim(accidents)
 }
 \seealso{
-\link{make_filename}
+\code{\link[=make_filename]{make_filename()}}
 }

@@ -1,20 +1,33 @@
 Package: fars
-Title: Read Fatality Analysis Reporting System (FARS) data
-Version: 0.0.0.3
-Authors@R: person("Enrique", "Pérez Herrero", email = "eph.project1500@gmail.com", role = c("aut", "cre"))
-Description: COURSERA: BUILDING R PACKAGES, Peer-graded Assignment.
-Depends: R (>= 3.3.3)
+Title: Read, Summarise and Map Fatality Analysis Reporting System (FARS) Data
+Version: 1.0.0
+Authors@R:
+    person("Enrique", "Pérez Herrero", email = "eph.project1500@gmail.com",
+           role = c("aut", "cre"))
+Description: Reads the yearly accident files of the US National Highway
+    Traffic Safety Administration's Fatality Analysis Reporting System (FARS),
+    counts the accidents by month and year and maps the accidents of a state.
+    Ships the files of 2013, 2014 and 2015. First written for the Coursera
+    course "Building R Packages" (2017).
 License: GPL-3
-Encoding: UTF-8
-LazyData: true
-RoxygenNote: 6.0.1
+URL: https://github.com/EnriquePH/FARS
+BugReports: https://github.com/EnriquePH/FARS/issues
+Depends:
+    R (>= 4.1.0)
 Imports:
-   dplyr,
-   maps,
-   readr,
-   tidyr,
-   magrittr
-Suggests: knitr,
+    dplyr (>= 1.1.0),
+    graphics,
+    maps,
+    rlang,
+    tibble,
+    tidyr (>= 1.0.0),
+    utils
+Suggests:
+    knitr,
     rmarkdown,
-    testthat
+    testthat (>= 3.0.0)
 VignetteBuilder: knitr
+Config/testthat/edition: 3
+Encoding: UTF-8
+Roxygen: list(markdown = TRUE)
+Config/roxygen2/version: 8.1.1
